@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "@budget/webapp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,9 +7,14 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "types": "tsc --noEmit --project ./tsconfig.json && tsc --noEmit --project ./tsconfig.node.json",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@budget/backend": "workspace:*",
+    "@tanstack/react-query": "^5.90.18",
+    "@trpc/client": "^11.8.1",
+    "@trpc/react-query": "^11.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
