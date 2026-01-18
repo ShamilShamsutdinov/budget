@@ -1,5 +1,10 @@
 {
   "name": "budget",
   "private": true,
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "scripts": {
+    "b": "pnpm --filter @budget/backend",
+    "w": "pnpm --filter @budget/webapp",
+    "dev": "pnpm -r --parallel dev"
+  }
 }
