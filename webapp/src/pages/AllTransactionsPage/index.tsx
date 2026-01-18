@@ -1,4 +1,6 @@
+import { getViewTransactionRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
+import { Link } from 'react-router-dom'
 
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
@@ -20,10 +22,12 @@ export const AllTransactionsPage = () => {
       <h1 className='text-6xl font-bold text-red-600'>All Transactions</h1>
       <p>Total: {result.data.transactions.length} transactions</p>
       {result.data.transactions.map((transaction) => (
-        <div key={transaction.id}>
-          <h2>{transaction.name}</h2>
-          <p>{transaction.transactions}</p>
-          <p>{transaction.category}</p>
+        <div  key={transaction.id}>
+          <Link to={getViewTransactionRoute({ id: transaction.id })}>
+            <h2>{transaction.name}</h2>
+            <p>{transaction.transaction}</p>
+            <p>{transaction.category}</p>
+          </Link>
         </div>
       ))}
     </div>
