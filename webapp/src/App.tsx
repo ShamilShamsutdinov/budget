@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AllTransactionsPage } from './pages/AllTransactionsPage'
 import { ViewTransactionPage } from './pages/ViewTransactionPage'
 import { getAllTransactionsRoute, getViewTransactionRoute, viewTransactionRouteParams } from './lib/routes'
+import { Layout } from './components/Layout'
 
 
 export const App = () => {
@@ -10,8 +11,10 @@ export const App = () => {
     <TrpcProvider>
      <BrowserRouter>
         <Routes>
-          <Route path={getAllTransactionsRoute()} element={<AllTransactionsPage />} />
-          <Route path={getViewTransactionRoute(viewTransactionRouteParams)} element={<ViewTransactionPage />} />
+          <Route element={<Layout />}>
+            <Route path={getAllTransactionsRoute()} element={<AllTransactionsPage />} />
+            <Route path={getViewTransactionRoute(viewTransactionRouteParams)} element={<ViewTransactionPage />} />
+          </Route>
         </Routes>
      </BrowserRouter>
     </TrpcProvider>
