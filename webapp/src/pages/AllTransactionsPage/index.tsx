@@ -17,7 +17,7 @@ export const AllTransactionsPage = () => {
   
   return (
     <div>
-      <h1>All Transactions</h1>
+      <h1 className='text-6xl font-bold text-red-600'>All Transactions</h1>
       <p>Total: {result.data.transactions.length} transactions</p>
       {result.data.transactions.map((transaction) => (
         <div key={transaction.id}>
