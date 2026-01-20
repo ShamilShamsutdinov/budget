@@ -1,9 +1,35 @@
+import { useState } from 'react'
+import { Modal } from '../../components/UI/Modal'
 import { getViewTransactionRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 import { Link } from 'react-router-dom'
+import { TransactionTypeToggle, type TransactionType } from '../../components/UI/TransactionTypeToggle'
+import { Select } from '../../components/UI/Select'
+import { Input } from '../../components/UI/Input'
 
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [transactionType, setTransactionType] = useState<TransactionType>('income');
+  const [category, setCategory] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [date, setDate] = useState('');
+
+    const incomeCategories = [
+        { value: 'salary', label: 'Зарплата' },
+        { value: 'freelance', label: 'Фриланс' },
+        { value: 'investment', label: 'Инвестиции' },
+        { value: 'other', label: 'Другое' },
+    ];
+
+    const expenseCategories = [
+        { value: 'food', label: 'Еда' },
+        { value: 'transport', label: 'Транспорт' },
+        { value: 'entertainment', label: 'Развлечения' },
+        { value: 'other', label: 'Другое' },
+    ];
+
   
   if (result.isLoading) {
     return <div>Loading...</div>
@@ -18,20 +44,262 @@ export const AllTransactionsPage = () => {
   }
   
   return (
-    <div>
-      <h1 className='text-4xl font-bold text-emerald-600 mb-6'>Все транзакции</h1>
-      <p className='text-sm text-gray-400 mb-2'>Всего: {result.data.transactions.length} транзакции</p>
-      {result.data.transactions.map((transaction) => (
-        <div  key={transaction.id}>
-          <Link className='flex justify-between items-center w-full bg-white shadow-lg p-5 rounded-4xl mb-3' to={getViewTransactionRoute({ id: transaction.id })}>
-            <h2>{transaction.name}</h2>
-              <div className='grid grid-cols-2 gap-2 w-75'>
-                <p className='font-medium text-white py-2 px-4 bg-emerald-600 rounded-3xl border-none text-center truncate'>{transaction.transaction}</p>
-                <p className='font-medium text-white py-2 px-4 bg-violet-500 rounded-3xl border-none text-center truncate'>{transaction.category}</p>
+    <>
+      <header className="header">
+          <div>
+              <h1>Все транзакции</h1>
+              <div className="transactions-count">Всего {result.data.transactions.length} транзакции</div>
+          </div>
+          <button className="add-btn" onClick={() => setIsOpen(true)}>
+              <i className="fas fa-plus"></i> 
+              <span>Добавить транзакцию</span>
+          </button>
+      </header>
+      <div className="stats-cards">
+          <div className="stat-card income-stat">
+              <div className="stat-icon">
+                  <i className="fas fa-arrow-down"></i>
               </div>
-          </Link>
+              <div className="stat-info">
+                  <h3>Общий доход</h3>
+                  <div className="stat-amount">85,430 ₽</div>
+                  <div className="stat-change">+12% с прошлого месяца</div>
+              </div>
+          </div>
+          
+          <div className="stat-card expense-stat">
+              <div className="stat-icon">
+                  <i className="fas fa-arrow-up"></i>
+              </div>
+              <div className="stat-info">
+                  <h3>Общий расход</h3>
+                  <div className="stat-amount">42,150 ₽</div>
+                  <div className="stat-change">+5% с прошлого месяца</div>
+              </div>
+          </div>
+          
+          <div className="stat-card">
+              <div className="stat-icon">
+                  <i className="fas fa-wallet"></i>
+              </div>
+              <div className="stat-info">
+                  <h3>Баланс</h3>
+                  <div className="stat-amount">43,280 ₽</div>
+                  <div className="stat-change">Текущий месяц</div>
+              </div>
+          </div>
+      </div> 
+      <div className="transactions-container">
+            <div className="transactions-header">
+                <h2>Последние транзакции</h2>
+                <div className="filters">
+                    <button className="filter-btn active">Все</button>
+                    <button className="filter-btn">Доходы</button>
+                    <button className="filter-btn">Расходы</button>
+                </div>
+            </div>
+            {result.data.transactions.map((transaction) => (
+                <div className='transactions-list' key={transaction.id}>
+                    <Link className={`transaction-item ${transaction.type === 'Доход' ? 'income-item' : 'expense-item'}`} to={getViewTransactionRoute({ id: transaction.id })}>
+                        <div className="transaction-icon">
+                            <i className="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div className="transaction-info">
+                            <h4>{transaction.category}</h4>
+                            <p>{transaction.type}</p>
+                            {/* <h4>Зарплата</h4>
+                            <p>Основной доход</p> */}
+                        </div>
+                        <div className="transaction-date">
+                            Пн, 15 мая
+                        </div>
+                        <div className="transaction-amount">{transaction.transaction}</div>
+                        <div className="transaction-actions">
+                            <button className="action-btn edit" title="Редактировать">
+                                <i className="fas fa-edit"></i>
+                            </button>
+                            <button className="action-btn delete" title="Удалить">
+                                <i className="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </Link>
+                </div>
+            ))}
+      </div>
+      
+      {/* <div className="transactions-container">
+            <div className="transactions-header">
+                <h2>Последние транзакции</h2>
+                <div className="filters">
+                    <button className="filter-btn active">Все</button>
+                    <button className="filter-btn">Доходы</button>
+                    <button className="filter-btn">Расходы</button>
+                </div>
+            </div>
+            
+            <div className="transactions-list">
+                <div className="transaction-item income-item">
+                    <div className="transaction-icon">
+                        <i className="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div className="transaction-info">
+                        <h4>Зарплата</h4>
+                        <p>Основной доход</p>
+                    </div>
+                    <div className="transaction-date">
+                        Пн, 15 мая
+                    </div>
+                    <div className="transaction-amount">+45,000 ₽</div>
+                    <div className="transaction-actions">
+                        <button className="action-btn edit" title="Редактировать">
+                            <i className="fas fa-edit"></i>
+                        </button>
+                        <button className="action-btn delete" title="Удалить">
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div className="transaction-item expense-item">
+                    <div className="transaction-icon">
+                        <i className="fas fa-shopping-cart"></i>
+                    </div>
+                    <div className="transaction-info">
+                        <h4>Продукты</h4>
+                        <p>Супермаркет</p>
+                    </div>
+                    <div className="transaction-date">
+                        Вт, 16 мая
+                    </div>
+                    <div className="transaction-amount">-3,850 ₽</div>
+                    <div className="transaction-actions">
+                        <button className="action-btn edit" title="Редактировать">
+                            <i className="fas fa-edit"></i>
+                        </button>
+                        <button className="action-btn delete" title="Удалить">
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div className="transaction-item expense-item">
+                    <div className="transaction-icon">
+                        <i className="fas fa-film"></i>
+                    </div>
+                    <div className="transaction-info">
+                        <h4>Кино</h4>
+                        <p>Развлечения</p>
+                    </div>
+                    <div className="transaction-date">
+                        Ср, 17 мая
+                    </div>
+                    <div className="transaction-amount">-1,200 ₽</div>
+                    <div className="transaction-actions">
+                        <button className="action-btn edit">
+                            <i className="fas fa-edit"></i>
+                        </button>
+                        <button className="action-btn delete">
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div className="transaction-item income-item">
+                    <div className="transaction-icon">
+                        <i className="fas fa-freelance"></i>
+                    </div>
+                    <div className="transaction-info">
+                        <h4>Фриланс</h4>
+                        <p>Дополнительный доход</p>
+                    </div>
+                    <div className="transaction-date">
+                        Чт, 18 мая
+                    </div>
+                    <div className="transaction-amount">+12,500 ₽</div>
+                    <div className="transaction-actions">
+                        <button className="action-btn edit">
+                            <i className="fas fa-edit"></i>
+                        </button>
+                        <button className="action-btn delete">
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           
+      </div> */}
+
+        <div className="chart-container">
+            <div className="chart-header">
+                <h2>Статистика доходов и расходов</h2>
+                <div className="chart-period">
+                    <button className="period-btn active">Неделя</button>
+                    <button className="period-btn">Месяц</button>
+                    <button className="period-btn">Год</button>
+                </div>
+            </div>
+            <div className="chart-placeholder">
+                <div>
+                    <i className="fas fa-chart-line"></i>
+                    <div>Здесь будет график доходов и расходов</div>
+                </div>
+            </div>
         </div>
-      ))}
-    </div>
+
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+            <div className="modal-header">
+                <h2>Добавить транзакцию</h2>
+            </div>
+            
+            <div className="modal-body">
+                <TransactionTypeToggle 
+                    value={transactionType}
+                    onChange={setTransactionType}
+                />
+                
+                <div className="form-group">
+                    <label htmlFor="amount">Сумма (₽)</label>
+                    <Input
+                        id="amount"
+                        type="number"
+                        value={amount}
+                        onChange={(value) => setAmount(value as number)} 
+                        placeholder="0"
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label htmlFor="category">Категория</label>
+                    <Select
+                        id="category" 
+                        value={category}
+                        onChange={setCategory}
+                        options={transactionType === 'income' ? incomeCategories : expenseCategories}
+                        placeholder="Выберите категорию"
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label htmlFor="date">Дата</label>
+                    <Input
+                        id="date"
+                        type="date"
+                        value={date}
+                        onChange={(value) => setDate(value as string)} 
+                    />
+                </div>
+                
+                <div className="form-group">
+                    <label htmlFor="comment">Комментарий (необязательно)</label>
+                    <textarea id="comment" className="form-control" placeholder="Добавьте описание..."></textarea>
+                </div>
+            </div>
+            
+            <div className="modal-footer">
+                <button className="btn btn-secondary" id="cancelModalBtn">Отмена</button>
+                <button className="btn btn-primary">Добавить транзакцию</button>
+            </div>
+        </Modal>
+    </>
   )
 }

@@ -2,21 +2,37 @@ import { Link, Outlet } from 'react-router-dom'
 import { getAllTransactionsRoute } from '../../lib/routes'
 
 export const Layout = () => {
+  // const [isOpenIncome, setIsOpenIncome] = useState(false)
+  // const [isOpenExpense, setIsOpenExpense] = useState(false)
   return (
-    <div className='container'>
-      <div className='flex pt-6'>
-          <div className='flex flex-col items-center mr-8 w-50 bg-white rounded-3xl p-5 h-200'>
-            <div className='w-10 h-10 bg-emerald-600 text-gray-200 rounded-[50%] flex justify-center items-center text-3xl font-bold'>$</div>
-            <ul className='mt-6'>
-                <li>
-                    <Link className='font-medium text-black' to={getAllTransactionsRoute()}>Все транзакции</Link>
-                </li>
-            </ul>
+      <div className='container'>
+        <aside className='sidebar'>
+          <div className='logo'>
+              <div className='logo-icon'>SB</div>
+              <div className='logo-text'>SmartBudget</div>
           </div>
-          <div className='p-5 bg-white w-full rounded-3xl'>
-            <Outlet />
-          </div>
+          <nav className="nav-menu">
+              <Link className='nav-item active' to={getAllTransactionsRoute()}>
+                <i className="fas fa-list"></i>
+                <span className='text-gray'>Все транзакции</span>
+              </Link>
+              <button className='nav-item income'>
+                <i className="fas fa-plus-circle"></i>
+                <span>Добавить доход</span>
+              </button>
+              <button className='nav-item expense'>
+                <i className="fas fa-minus-circle"></i>
+                <span>Добавить расход</span>
+              </button>
+          </nav>
+        </aside>
+        <div className='main-content'>
+          <Outlet />
+        </div>
+
+        {/* <Modal isOpen={isOpenExpense} onClose={() => setIsOpenExpense(false)}>
+          Расход
+        </Modal> */}
       </div>
-    </div>
   )
 }
