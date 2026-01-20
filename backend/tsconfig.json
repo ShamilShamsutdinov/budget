@@ -5,6 +5,7 @@
   },
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": "./src",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,

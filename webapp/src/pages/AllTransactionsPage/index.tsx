@@ -3,32 +3,12 @@ import { Modal } from '../../components/UI/Modal'
 import { getViewTransactionRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 import { Link } from 'react-router-dom'
-import { TransactionTypeToggle, type TransactionType } from '../../components/UI/TransactionTypeToggle'
-import { Select } from '../../components/UI/Select'
-import { Input } from '../../components/UI/Input'
+import { AddTransactionForm } from '../../components/Forms/AddTransactionForm'
 
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [transactionType, setTransactionType] = useState<TransactionType>('income');
-  const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState('');
-
-    const incomeCategories = [
-        { value: 'salary', label: 'Зарплата' },
-        { value: 'freelance', label: 'Фриланс' },
-        { value: 'investment', label: 'Инвестиции' },
-        { value: 'other', label: 'Другое' },
-    ];
-
-    const expenseCategories = [
-        { value: 'food', label: 'Еда' },
-        { value: 'transport', label: 'Транспорт' },
-        { value: 'entertainment', label: 'Развлечения' },
-        { value: 'other', label: 'Другое' },
-    ];
 
   
   if (result.isLoading) {
@@ -247,58 +227,7 @@ export const AllTransactionsPage = () => {
         </div>
 
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-            <div className="modal-header">
-                <h2>Добавить транзакцию</h2>
-            </div>
-            
-            <div className="modal-body">
-                <TransactionTypeToggle 
-                    value={transactionType}
-                    onChange={setTransactionType}
-                />
-                
-                <div className="form-group">
-                    <label htmlFor="amount">Сумма (₽)</label>
-                    <Input
-                        id="amount"
-                        type="number"
-                        value={amount}
-                        onChange={(value) => setAmount(value as number)} 
-                        placeholder="0"
-                    />
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="category">Категория</label>
-                    <Select
-                        id="category" 
-                        value={category}
-                        onChange={setCategory}
-                        options={transactionType === 'income' ? incomeCategories : expenseCategories}
-                        placeholder="Выберите категорию"
-                    />
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="date">Дата</label>
-                    <Input
-                        id="date"
-                        type="date"
-                        value={date}
-                        onChange={(value) => setDate(value as string)} 
-                    />
-                </div>
-                
-                <div className="form-group">
-                    <label htmlFor="comment">Комментарий (необязательно)</label>
-                    <textarea id="comment" className="form-control" placeholder="Добавьте описание..."></textarea>
-                </div>
-            </div>
-            
-            <div className="modal-footer">
-                <button className="btn btn-secondary" id="cancelModalBtn">Отмена</button>
-                <button className="btn btn-primary">Добавить транзакцию</button>
-            </div>
+            <AddTransactionForm />
         </Modal>
     </>
   )

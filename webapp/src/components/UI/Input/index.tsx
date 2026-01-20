@@ -1,9 +1,10 @@
 import React from 'react';
+import { type FormikProps } from 'formik'
 
 type InputProps = {
   type?: 'text' | 'number' | 'date';
-  value?: string | number;
-  onChange?: (value: string | number) => void;
+  name: string;
+  formik: FormikProps<any>
   placeholder?: string;
   className?: string;
   id?: string;
@@ -11,8 +12,8 @@ type InputProps = {
 
 export const Input: React.FC<InputProps> = ({
   type = 'text',
-  value = '',
-  onChange,
+  name,
+  formik,
   placeholder = '',
   className = '',
   id,
@@ -21,10 +22,14 @@ export const Input: React.FC<InputProps> = ({
     <input
       type={type}
       id={id}
-      value={value}
-      onChange={(e) => onChange?.(e.target.value)}
+      name={name}
+      value={formik.values[name] || ''} 
+      onChange={(e) => {
+        formik.setFieldValue(name, e.target.value);
+      }}
       placeholder={placeholder}
       className={`form-control ${className}`}
     />
   );
 };
+
