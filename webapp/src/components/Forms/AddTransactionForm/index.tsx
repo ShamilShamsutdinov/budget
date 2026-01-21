@@ -2,10 +2,12 @@ import { Input } from "../../UI/Input"
 import { useFormik } from 'formik'
 import { Select } from "../../UI/Select"
 import { TransactionTypeToggle, type TransactionType } from "../../UI/TransactionTypeToggle"
+import { trpc } from '../../../lib/trpc'
 // import { withZodSchema } from 'formik-validator-zod'
 // import { z } from 'zod' - понадобится для валидации формы
 
 export interface TransactionFormData {
+  id: string;
   type: TransactionType;
   amount: string;
   category: string;
@@ -13,7 +15,17 @@ export interface TransactionFormData {
   comment?: string;
 }
 
-export const AddTransactionForm = () => {
+interface AddTransactionFormProps {
+  onSubmitSuccess?: () => void
+}
+
+export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) => {
+    const createTransaction = trpc.createTransaction.useMutation({
+        onSuccess: () => {
+            formik.resetForm()
+            onSubmitSuccess?.() 
+        }
+    })
     const incomeCategories = [
         { value: 'salary', label: 'Зарплата' },
         { value: 'freelance', label: 'Фриланс' },
@@ -30,14 +42,15 @@ export const AddTransactionForm = () => {
 
     const formik = useFormik({
         initialValues: {
+            id: '',
             type: 'income' as TransactionType,
             amount: '',
             category: '',
             date: '',
             comment: '',
         },
-        onSubmit: (values) => {
-        console.info('Submitted', values)
+        onSubmit: async (values) => {
+            await createTransaction.mutateAsync(values)
         },
     })
 
@@ -111,4 +124,5 @@ export const AddTransactionForm = () => {
     )
     
 }
+
 

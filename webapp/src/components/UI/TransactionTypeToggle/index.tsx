@@ -1,25 +1,3 @@
-// export const TransactionTypeToogle = () => {
-//     return (
-//         <div className="transaction-type">
-//             <div className="type-option income">
-//                 <input type="radio" id="type-income" name="transaction-type" />
-//                 <label htmlFor="type-income" className="type-label">
-//                     <i className="fas fa-arrow-down"></i> 
-//                     <span>Доход</span>
-//                 </label>
-//             </div>
-//             <div className="type-option expense">
-//                 <input type="radio" id="type-expense" name="transaction-type" />
-//                 <label htmlFor="type-expense" className="type-label">
-//                     <i className="fas fa-arrow-up"></i> 
-//                     <span>Расход</span>
-//                 </label>
-//             </div>
-//         </div>
-//     )
-// }
-
-
 import React from 'react';
 
 export type TransactionType = 'income' | 'expense';

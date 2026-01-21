@@ -25,7 +25,7 @@ export const ViewTransactionPage = () => {
     <div className="flex flex-col justify-center items-center">
       <div className="flex flex-col justify-center items-center w-200 min-h-50 bg-emerald-600 rounded-4xl mb-4">
         <h2 className="text-white text-4xl font-medium mb-6">Оплата</h2>
-        <p className="text-white text-2xl font-medium">{data.transaction.transaction}</p>
+        <p className="text-white text-2xl font-medium">{data.transaction.amount}</p>
       </div>
       <div className="flex flex-col justify-center items-center w-200 min-h-50 bg-violet-500 rounded-4xl mb-4">
         <h2 className="text-white text-4xl font-medium mb-6">Категория</h2>

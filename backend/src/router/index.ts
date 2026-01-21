@@ -1,10 +1,16 @@
 import { trpc } from "../lib/trpc"
-import { getTransactionTrpcRoute } from "./getTransaction"
-import { getTransactionsTrpcRoute } from "./getTransactions"
+// @index('./**/index.ts', f => `import { ${f.path.split('/').slice(0, -1).pop()}TrpcRoute } from '${f.path.split('/').slice(0, -1).join('/')}'`)
+import { createTransactionTrpcRoute } from './createTransaction'
+import { getTransactionTrpcRoute } from './getTransaction'
+import { getTransactionsTrpcRoute } from './getTransactions'
+// @endindex
 
 export const trpcRouter = trpc.router({
-   getTransaction: getTransactionTrpcRoute,
-   getTransactions: getTransactionsTrpcRoute
+  // @index('./**/index.ts', f => `${f.path.split('/').slice(0, -1).pop()}: ${f.path.split('/').slice(0, -1).pop()}TrpcRoute,`)
+  createTransaction: createTransactionTrpcRoute,
+  getTransaction: getTransactionTrpcRoute,
+  getTransactions: getTransactionsTrpcRoute,
+  // @endindex
 })
 
 export type TrpcRouter = typeof trpcRouter

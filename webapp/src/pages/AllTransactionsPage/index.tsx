@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Modal } from '../../components/UI/Modal'
 import { getViewTransactionRoute } from '../../lib/routes'
-import { trpc } from '../../lib/trpc'
 import { Link } from 'react-router-dom'
 import { AddTransactionForm } from '../../components/Forms/AddTransactionForm'
+import { trpc } from '../../lib/trpc'
+import { getCategoryLabel, getTypeLabel } from '../../utils/translate';
 
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
@@ -80,20 +81,20 @@ export const AllTransactionsPage = () => {
             </div>
             {result.data.transactions.map((transaction) => (
                 <div className='transactions-list' key={transaction.id}>
-                    <Link className={`transaction-item ${transaction.type === 'Доход' ? 'income-item' : 'expense-item'}`} to={getViewTransactionRoute({ id: transaction.id })}>
+                    <Link className={`transaction-item ${transaction.type === 'income' ? 'income-item' : 'expense-item'}`} to={getViewTransactionRoute({ id: transaction.id })}>
                         <div className="transaction-icon">
                             <i className="fas fa-money-bill-wave"></i>
                         </div>
                         <div className="transaction-info">
-                            <h4>{transaction.category}</h4>
-                            <p>{transaction.type}</p>
+                            <h4>{getCategoryLabel(transaction.category, transaction.type)}</h4>
+                            <p>{getTypeLabel(transaction.type)}</p>
                             {/* <h4>Зарплата</h4>
                             <p>Основной доход</p> */}
                         </div>
                         <div className="transaction-date">
-                            Пн, 15 мая
+                            {transaction.date}
                         </div>
-                        <div className="transaction-amount">{transaction.transaction}</div>
+                        <div className="transaction-amount">{transaction.amount}</div>
                         <div className="transaction-actions">
                             <button className="action-btn edit" title="Редактировать">
                                 <i className="fas fa-edit"></i>
@@ -227,7 +228,7 @@ export const AllTransactionsPage = () => {
         </div>
 
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-            <AddTransactionForm />
+            <AddTransactionForm onSubmitSuccess={() => setIsOpen(false)}/>
         </Modal>
     </>
   )
