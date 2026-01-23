@@ -1,10 +1,20 @@
 {
-  "name": "budget",
-  "private": true,
-  "version": "0.0.0",
-  "scripts": {
-    "b": "pnpm --filter @budget/backend",
-    "w": "pnpm --filter @budget/webapp",
-    "dev": "pnpm -r --parallel dev"
-  }
+    "name": "budget",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "b": "pnpm --filter @budget/backend",
+        "w": "pnpm --filter @budget/webapp",
+        "dev": "pnpm -r --parallel dev",
+        "types": "concurrently 'pnpm b types' 'pnpm w types'",
+        "prettify": "pnpm -r --parallel prettify"
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.2",
+        "prettier": "^3.5.0",
+        "rimraf": "^6.0.1",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.7.3"
+    }
 }
