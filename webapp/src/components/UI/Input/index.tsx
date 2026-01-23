@@ -29,6 +29,7 @@ export const Input: React.FC<InputProps> = ({
       }}
       placeholder={placeholder}
       className={`form-control ${className}`}
+      disabled={formik.isSubmitting}
     />
   );
 };

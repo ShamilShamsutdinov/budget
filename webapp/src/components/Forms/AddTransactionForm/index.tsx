@@ -117,7 +117,7 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
             
             <div className="modal-footer">
                 <button type="button"  className="btn btn-secondary" onClick={() => formik.resetForm()}>Отмена</button>
-                <button type="submit" className="btn btn-primary">Добавить транзакцию</button>
+                <button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{formik.isSubmitting ? 'Отправляется...' : 'Добавить транзакцию'}</button>
             </div>
         </form>
 

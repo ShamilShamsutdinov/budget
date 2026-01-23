@@ -88,8 +88,6 @@ export const AllTransactionsPage = () => {
                         <div className="transaction-info">
                             <h4>{getCategoryLabel(transaction.category, transaction.type)}</h4>
                             <p>{getTypeLabel(transaction.type)}</p>
-                            {/* <h4>Зарплата</h4>
-                            <p>Основной доход</p> */}
                         </div>
                         <div className="transaction-date">
                             {transaction.date}

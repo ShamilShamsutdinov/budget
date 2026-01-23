@@ -1,7 +1,4 @@
-import { TransactionTypeToggle, type TransactionType } from "../components/UI/TransactionTypeToggle"
-
 export const getCategoryLabel = (value: string, type: string): string => {
-  // Внутри проверяем type
   const isIncome = type === 'income';
   
   const incomeCategories: Record<string, string> = {
