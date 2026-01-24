@@ -14,5 +14,5 @@ model Transaction {
     amount   Int
     category String
     date     DateTime
-    comment  String
+    comment  String?
 }

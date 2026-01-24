@@ -9,7 +9,7 @@ import { trpc } from '../../../lib/trpc'
 export interface TransactionFormData {
   id: string;
   type: TransactionType;
-  amount: string;
+  amount: number;
   category: string;
   date: string;
   comment?: string;
@@ -20,8 +20,11 @@ interface AddTransactionFormProps {
 }
 
 export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) => {
+    const utils = trpc.useUtils()
+
     const createTransaction = trpc.createTransaction.useMutation({
         onSuccess: () => {
+            utils.getTransactions.invalidate()
             formik.resetForm()
             onSubmitSuccess?.() 
         }
@@ -44,13 +47,17 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
         initialValues: {
             id: '',
             type: 'income' as TransactionType,
-            amount: '',
+            amount: 0,
             category: '',
             date: '',
             comment: '',
         },
         onSubmit: async (values) => {
-            await createTransaction.mutateAsync(values)
+            const dataToSend = {
+                ...values,
+                amount: Number(values.amount), 
+            }
+            await createTransaction.mutateAsync(dataToSend)
         },
     })
 
