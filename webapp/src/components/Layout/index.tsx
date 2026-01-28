@@ -1,9 +1,9 @@
 import { Link, Outlet } from 'react-router-dom'
-import { getAllTransactionsRoute, getSignUpRoute } from '../../lib/routes'
+import { getAllTransactionsRoute, getSignInRoute, getSignOutRoute, getSignUpRoute } from '../../lib/routes'
+import { trpc } from '../../lib/trpc'
 
 export const Layout = () => {
-  // const [isOpenIncome, setIsOpenIncome] = useState(false)
-  // const [isOpenExpense, setIsOpenExpense] = useState(false)
+  const { data, isLoading, isFetching, isError } = trpc.getMe.useQuery()
   return (
       <div className='container'>
         <aside className='sidebar'>
@@ -12,23 +12,34 @@ export const Layout = () => {
               <div className='logo-text'>SmartBudget</div>
           </div>
           <nav className="nav-menu">
-              <Link className='nav-item active' to={getAllTransactionsRoute()}>
+            <Link className='nav-item active' to={getAllTransactionsRoute()}>
                 <i className="fas fa-list"></i>
                 <span className='text-gray'>Все транзакции</span>
-              </Link>
-              <Link className='nav-item active' to={getSignUpRoute()}>
-                <i className="fas fa-user-plus"></i>
-                <span className='text-gray'>Зарегестрироваться</span>
-              </Link>
+            </Link>
+            {isLoading || isFetching || isError ? null : data.me ? (
+              <>
+                <Link className='nav-item' to={getSignOutRoute()}>
+                  <i className="fas fa-user-plus"></i>
+                  <span className='text-gray'>Выйти ({data.me.nick})</span>
+                </Link>
+              </>
+            ) : (
+              <>
+               <Link className='nav-item' to={getSignUpRoute()}>
+                  <i className="fas fa-user-plus"></i>
+                  <span className='text-gray'>Зарегистрироваться</span>
+                </Link>
+                <Link className='nav-item' to={getSignInRoute()}>
+                  <i className="fas fa-sign-in-alt"></i>
+                  <span className='text-gray'>Войти</span>
+                </Link>
+              </>
+            )}
           </nav>
         </aside>
         <div className='main-content'>
           <Outlet />
         </div>
-
-        {/* <Modal isOpen={isOpenExpense} onClose={() => setIsOpenExpense(false)}>
-          Расход
-        </Modal> */}
       </div>
   )
 }

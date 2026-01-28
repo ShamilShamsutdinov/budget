@@ -9,3 +9,7 @@ export type ViewTransactionRouteParams = typeof viewTransactionRouteParams
 export const getViewTransactionRoute = ({ id }: ViewTransactionRouteParams) => `/transactions/${id}`
 
 export const getSignUpRoute = () => '/sign-up'
+
+export const getSignInRoute = () => '/sign-in'
+
+export const getSignOutRoute = () => '/sign-out'

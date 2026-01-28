@@ -252,6 +252,15 @@ a{
   font-size: 13px;
 }
 
+.add-btn.disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #6c757d;
+    pointer-events: none;
+    
+}
+  
+
 .add-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
@@ -825,12 +834,17 @@ a{
   margin-right: 8px;
 }
 
-.form-sign-up{
+.form-auth{
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
   max-width: 500px;
+
+}
+
+.form-title{
+  margin-bottom: 20px;
 
 }
 
@@ -926,7 +940,7 @@ a{
     width: 100%;
     justify-content: center;
   }
-  
+
   .transaction-item {
     flex-wrap: wrap;
   }

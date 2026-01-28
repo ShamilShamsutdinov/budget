@@ -10,6 +10,8 @@ import {format} from 'date-fns/format' ;
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
 
+  const {data} = trpc.getMe.useQuery()
+
   const [isOpen, setIsOpen] = useState(false)
 
   
@@ -32,7 +34,7 @@ export const AllTransactionsPage = () => {
               <h1>Все транзакции</h1>
               <div className="transactions-count">Всего {result.data.transactions.length} транзакции</div>
           </div>
-          <button className="add-btn" onClick={() => setIsOpen(true)}>
+          <button disabled={!data?.me?.id} className={`add-btn ${!data?.me?.id ? 'disabled' : ''}`} onClick={() => setIsOpen(true)}>
               <i className="fas fa-plus"></i> 
               <span>Добавить транзакцию</span>
           </button>
