@@ -1,9 +1,14 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { getAllTransactionsRoute, getSignInRoute, getSignOutRoute, getSignUpRoute } from '../../lib/routes'
 import { trpc } from '../../lib/trpc'
 
 export const Layout = () => {
   const { data, isLoading, isFetching, isError } = trpc.getMe.useQuery()
+  const location = useLocation() 
+
+  const isActive = (path: string) => {
+    return location.pathname === path
+  }
   return (
       <div className='container'>
         <aside className='sidebar'>
@@ -12,7 +17,7 @@ export const Layout = () => {
               <div className='logo-text'>SmartBudget</div>
           </div>
           <nav className="nav-menu">
-            <Link className='nav-item active' to={getAllTransactionsRoute()}>
+            <Link className={`nav-item ${isActive(getAllTransactionsRoute()) ? 'active' : ''}`} to={getAllTransactionsRoute()}>
                 <i className="fas fa-list"></i>
                 <span className='text-gray'>Все транзакции</span>
             </Link>
@@ -25,11 +30,11 @@ export const Layout = () => {
               </>
             ) : (
               <>
-               <Link className='nav-item' to={getSignUpRoute()}>
+               <Link className={`nav-item ${isActive(getSignUpRoute()) ? 'active' : ''}`} to={getSignUpRoute()}>
                   <i className="fas fa-user-plus"></i>
                   <span className='text-gray'>Зарегистрироваться</span>
                 </Link>
-                <Link className='nav-item' to={getSignInRoute()}>
+                <Link className={`nav-item ${isActive(getSignInRoute()) ? 'active' : ''}`} to={getSignInRoute()}>
                   <i className="fas fa-sign-in-alt"></i>
                   <span className='text-gray'>Войти</span>
                 </Link>
