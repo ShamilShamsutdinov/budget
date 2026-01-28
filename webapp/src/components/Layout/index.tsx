@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import { getAllTransactionsRoute } from '../../lib/routes'
+import { getAllTransactionsRoute, getSignUpRoute } from '../../lib/routes'
 
 export const Layout = () => {
   // const [isOpenIncome, setIsOpenIncome] = useState(false)
@@ -16,14 +16,10 @@ export const Layout = () => {
                 <i className="fas fa-list"></i>
                 <span className='text-gray'>Все транзакции</span>
               </Link>
-              <button className='nav-item income'>
-                <i className="fas fa-plus-circle"></i>
-                <span>Добавить доход</span>
-              </button>
-              <button className='nav-item expense'>
-                <i className="fas fa-minus-circle"></i>
-                <span>Добавить расход</span>
-              </button>
+              <Link className='nav-item active' to={getSignUpRoute()}>
+                <i className="fas fa-user-plus"></i>
+                <span className='text-gray'>Зарегестрироваться</span>
+              </Link>
           </nav>
         </aside>
         <div className='main-content'>

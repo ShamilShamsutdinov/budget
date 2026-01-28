@@ -10,6 +10,9 @@ const transactions = await ctx.prisma.transaction.findMany({
     date: true,
     comment: true
   },
+  orderBy: {
+    date: 'desc',
+  }
 })
 
   return { transactions }

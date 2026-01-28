@@ -825,6 +825,15 @@ a{
   margin-right: 8px;
 }
 
+.form-sign-up{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 500px;
+
+}
+
 /* Адаптивность */
 @media (max-width: 992px) {
   .sidebar {

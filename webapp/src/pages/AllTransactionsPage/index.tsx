@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { AddTransactionForm } from '../../components/Forms/AddTransactionForm'
 import { trpc } from '../../lib/trpc'
 import { getCategoryLabel, getTypeLabel } from '../../utils/translate';
+import {format} from 'date-fns/format' ;
 
 export const AllTransactionsPage = () => {
   const result = trpc.getTransactions.useQuery()
@@ -90,7 +91,7 @@ export const AllTransactionsPage = () => {
                             <p>{getTypeLabel(transaction.type)}</p>
                         </div>
                         <div className="transaction-date">
-                            {transaction.date}
+                            {format(transaction.date, 'yyyy-MM-dd')}
                         </div>
                         <div className="transaction-amount">{transaction.amount}</div>
                         <div className="transaction-actions">

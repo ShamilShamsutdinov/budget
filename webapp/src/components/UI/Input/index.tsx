@@ -2,7 +2,7 @@ import React from 'react';
 import { type FormikProps } from 'formik'
 
 type InputProps = {
-  type?: 'text' | 'number' | 'date';
+  type?: 'text' | 'number' | 'date' | 'password';
   name: string;
   formik: FormikProps<any>
   placeholder?: string;

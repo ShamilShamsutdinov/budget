@@ -7,3 +7,5 @@ export const getAllTransactionsRoute = () => '/'
 export const viewTransactionRouteParams = getRouteParams({ id: true })
 export type ViewTransactionRouteParams = typeof viewTransactionRouteParams
 export const getViewTransactionRoute = ({ id }: ViewTransactionRouteParams) => `/transactions/${id}`
+
+export const getSignUpRoute = () => '/sign-up'
