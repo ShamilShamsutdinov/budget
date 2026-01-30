@@ -12,6 +12,9 @@ export const createTransactionTrpcRoute = trpc.procedure
       })
     ) 
     .mutation(async ({ ctx, input }) => {
+     if(!ctx.me){
+       throw Error('NO_AUTHORIZATION')
+     }
     
     const newTransaction = await ctx.prisma.transaction.create({
       data: {
@@ -20,6 +23,7 @@ export const createTransactionTrpcRoute = trpc.procedure
         category: input.category,
         date: new Date(input.date),
         comment: input.comment || null, 
+        ownerId: ctx.me.id
       },
     })
 

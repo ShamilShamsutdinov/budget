@@ -9,10 +9,11 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  nick      String   @unique
-  password  String
-  createdAt DateTime @default(now())
+    id           String        @id @default(uuid())
+    nick         String        @unique
+    password     String
+    createdAt    DateTime      @default(now())
+    transactions Transaction[]
 }
 
 model Transaction {
@@ -22,4 +23,6 @@ model Transaction {
     category String
     date     DateTime
     comment  String?
+    ownerId  String
+    owner    User     @relation(fields: [ownerId], references: [id])
 }

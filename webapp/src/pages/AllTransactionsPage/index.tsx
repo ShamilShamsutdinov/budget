@@ -8,9 +8,11 @@ import { getCategoryLabel, getTypeLabel } from '../../utils/translate';
 import {format} from 'date-fns/format' ;
 
 export const AllTransactionsPage = () => {
-  const result = trpc.getTransactions.useQuery()
-
   const {data} = trpc.getMe.useQuery()
+
+  const result = trpc.getTransactions.useQuery(undefined, {
+    enabled: !!data?.me,
+  })
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -25,6 +27,15 @@ export const AllTransactionsPage = () => {
   
   if (!result.data) {
     return <div>No data available</div>
+  }
+
+  if (!data?.me) {
+    return (
+      <div>
+        <h1>Все транзакции</h1>
+        <p>Пожалуйста, авторизуйтесь, чтобы видеть свои транзакции.</p>
+      </div>
+    )
   }
   
   return (
