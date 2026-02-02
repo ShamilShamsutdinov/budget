@@ -336,10 +336,11 @@ a{
 
 /* Список транзакций */
 .transactions-container {
+  display: flex;
+  flex-direction: column;
   background: white;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  overflow: hidden;
   margin-bottom: 32px;
 }
 
@@ -349,6 +350,7 @@ a{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0; 
 }
 
 .transactions-header h2 {
@@ -380,6 +382,8 @@ a{
 
 .transactions-list {
   padding: 0;
+  max-height: 267px;
+  overflow-y: auto;
 }
 
 .transaction-item {

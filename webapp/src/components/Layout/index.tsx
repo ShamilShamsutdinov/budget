@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import { getAllTransactionsRoute, getSignInRoute, getSignOutRoute, getSignUpRoute } from '../../lib/routes'
 import { useMe } from '../../lib/ctx'
 
+
 export const Layout = () => {
   const me = useMe()
   const location = useLocation() 

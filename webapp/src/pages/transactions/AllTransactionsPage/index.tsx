@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Modal } from "../../../components/UI/Modal";
 import { getViewTransactionRoute } from "../../../lib/routes";
 import { Link } from "react-router-dom";
@@ -12,18 +12,29 @@ import { format } from "date-fns/format";
 import { formatDateForInput } from "../../../utils/date";
 import type { TrpcRouterOutput } from "@budget/backend/src/router";
 import { useMe } from "../../../lib/ctx";
+import InfiniteScroll from 'react-infinite-scroller'
 
 export const AllTransactionsPage = () => {
   const me = useMe();
 
-  const result = trpc.getTransactions.useQuery(undefined, {
-    enabled: !!me,
-  });
+  const { data, error, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    trpc.getTransactions.useInfiniteQuery(
+      {
+        limit: 2,
+      },
+      {
+        getNextPageParam: (lastPage) => {
+          return lastPage.nextCursor
+        },
+      }
+  )
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] =
     useState<TransactionFormData | null>(null);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   type TransactionFromAPI =
     TrpcRouterOutput["getTransactions"]["transactions"][0];
@@ -49,15 +60,15 @@ export const AllTransactionsPage = () => {
     setIsAddModalOpen(false);
   };
 
-  if (result.isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (result.isError) {
-    return <div>Error: {result.error.message}</div>;
+  if (isError) {
+    return <div>Error: {error.message}</div>;
   }
 
-  if (!result.data) {
+  if (!data) {
     return <div>No data available</div>;
   }
 
@@ -70,13 +81,15 @@ export const AllTransactionsPage = () => {
     );
   }
 
+  const allTransactions = data.pages.flatMap((page) => page.transactions);
+
   return (
     <>
       <header className="header">
         <div>
           <h1>Все транзакции</h1>
           <div className="transactions-count">
-            Всего {result.data.transactions.length} транзакции
+            Всего {allTransactions.length} транзакции
           </div>
         </div>
         <button
@@ -122,6 +135,7 @@ export const AllTransactionsPage = () => {
           </div>
         </div>
       </div>
+
       <div className="transactions-container">
         <div className="transactions-header">
           <h2>Последние транзакции</h2>
@@ -131,147 +145,65 @@ export const AllTransactionsPage = () => {
             <button className="filter-btn">Расходы</button>
           </div>
         </div>
-        {result.data.transactions.map((transaction) => (
-          <div className="transactions-list" key={transaction.id}>
-            <Link
-              className={`transaction-item ${transaction.type === "income" ? "income-item" : "expense-item"}`}
-              to={getViewTransactionRoute({ id: transaction.id })}
-            >
-              <div className="transaction-icon">
-                <i className="fas fa-money-bill-wave"></i>
+        <div className="transactions-list" ref={scrollContainerRef}>
+          <InfiniteScroll
+            pageStart={0}
+            threshold={267}
+            loadMore={() => {
+              if (!isFetchingNextPage && hasNextPage) {
+                void fetchNextPage()
+              }
+            }}
+            hasMore={hasNextPage}
+            loader={
+              <div className="loading-indicator" key="loader">
+                Загрузка...
               </div>
-              <div className="transaction-info">
-                <h4>
-                  {getCategoryLabel(transaction.category, transaction.type)}
-                </h4>
-                <p>{getTypeLabel(transaction.type)}</p>
-              </div>
-              <div className="transaction-date">
-                {format(transaction.date, "yyyy-MM-dd")}
-              </div>
-              <div className="transaction-amount">{transaction.amount}</div>
-              <div className="transaction-actions">
-                <button
-                  className="action-btn edit"
-                  title="Редактировать"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleEditClick(transaction);
-                  }}
+            }
+            getScrollParent={() => scrollContainerRef.current}
+            useWindow={false}
+          >
+            {allTransactions.map((transaction) => (
+              <div key={transaction.id}>
+                <Link
+                  className={`transaction-item ${transaction.type === "income" ? "income-item" : "expense-item"}`}
+                  to={getViewTransactionRoute({ id: transaction.id })}
                 >
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button className="action-btn delete" title="Удалить">
-                  <i className="fas fa-trash"></i>
-                </button>
+                  <div className="transaction-icon">
+                    <i className="fas fa-money-bill-wave"></i>
+                  </div>
+                  <div className="transaction-info">
+                    <h4>
+                      {getCategoryLabel(transaction.category, transaction.type)}
+                    </h4>
+                    <p>{getTypeLabel(transaction.type)}</p>
+                  </div>
+                  <div className="transaction-date">
+                    {format(transaction.date, "yyyy-MM-dd")}
+                  </div>
+                  <div className="transaction-amount">{transaction.amount}</div>
+                  <div className="transaction-actions">
+                    <button
+                      className="action-btn edit"
+                      title="Редактировать"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleEditClick(transaction);
+                      }}
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
+                    <button className="action-btn delete" title="Удалить">
+                      <i className="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </Link>
               </div>
-            </Link>
-          </div>
-        ))}
+            ))}
+          </InfiniteScroll>
+        </div>
       </div>
-
-      {/* <div className="transactions-container">
-            <div className="transactions-header">
-                <h2>Последние транзакции</h2>
-                <div className="filters">
-                    <button className="filter-btn active">Все</button>
-                    <button className="filter-btn">Доходы</button>
-                    <button className="filter-btn">Расходы</button>
-                </div>
-            </div>
-            
-            <div className="transactions-list">
-                <div className="transaction-item income-item">
-                    <div className="transaction-icon">
-                        <i className="fas fa-money-bill-wave"></i>
-                    </div>
-                    <div className="transaction-info">
-                        <h4>Зарплата</h4>
-                        <p>Основной доход</p>
-                    </div>
-                    <div className="transaction-date">
-                        Пн, 15 мая
-                    </div>
-                    <div className="transaction-amount">+45,000 ₽</div>
-                    <div className="transaction-actions">
-                        <button className="action-btn edit" title="Редактировать">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                        <button className="action-btn delete" title="Удалить">
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div className="transaction-item expense-item">
-                    <div className="transaction-icon">
-                        <i className="fas fa-shopping-cart"></i>
-                    </div>
-                    <div className="transaction-info">
-                        <h4>Продукты</h4>
-                        <p>Супермаркет</p>
-                    </div>
-                    <div className="transaction-date">
-                        Вт, 16 мая
-                    </div>
-                    <div className="transaction-amount">-3,850 ₽</div>
-                    <div className="transaction-actions">
-                        <button className="action-btn edit" title="Редактировать">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                        <button className="action-btn delete" title="Удалить">
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div className="transaction-item expense-item">
-                    <div className="transaction-icon">
-                        <i className="fas fa-film"></i>
-                    </div>
-                    <div className="transaction-info">
-                        <h4>Кино</h4>
-                        <p>Развлечения</p>
-                    </div>
-                    <div className="transaction-date">
-                        Ср, 17 мая
-                    </div>
-                    <div className="transaction-amount">-1,200 ₽</div>
-                    <div className="transaction-actions">
-                        <button className="action-btn edit">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                        <button className="action-btn delete">
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div className="transaction-item income-item">
-                    <div className="transaction-icon">
-                        <i className="fas fa-freelance"></i>
-                    </div>
-                    <div className="transaction-info">
-                        <h4>Фриланс</h4>
-                        <p>Дополнительный доход</p>
-                    </div>
-                    <div className="transaction-date">
-                        Чт, 18 мая
-                    </div>
-                    <div className="transaction-amount">+12,500 ₽</div>
-                    <div className="transaction-actions">
-                        <button className="action-btn edit">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                        <button className="action-btn delete">
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-           
-      </div> */}
 
       <div className="chart-container">
         <div className="chart-header">

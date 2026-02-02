@@ -17,12 +17,13 @@ model User {
 }
 
 model Transaction {
-    id       String   @id @default(uuid())
-    type     String
-    amount   Int
-    category String
-    date     DateTime
-    comment  String?
-    ownerId  String
-    owner    User     @relation(fields: [ownerId], references: [id])
+    id           String   @id @default(uuid())
+    serialNumber Int      @unique @default(autoincrement())
+    type         String
+    amount       Int
+    category     String
+    date         DateTime
+    comment      String?
+    ownerId      String
+    owner        User     @relation(fields: [ownerId], references: [id])
 }
