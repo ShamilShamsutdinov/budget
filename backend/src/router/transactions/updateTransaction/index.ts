@@ -1,4 +1,4 @@
-import { trpc } from '../../lib/trpc'
+import { trpc } from '../../../lib/trpc'
 import { zUpdateTransactionTrpcInput } from './input'
 
 export const updateTransactionTrpcRoute = trpc.procedure.input(zUpdateTransactionTrpcInput).mutation(async ({ ctx, input }) => {

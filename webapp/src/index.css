@@ -848,6 +848,21 @@ a{
 
 }
 
+.not-found{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.not-found__title{
+  font-size: 60px;
+}
+
+.not-found__subtitle{
+  font-size: 24px;
+}
+
 /* Адаптивность */
 @media (max-width: 992px) {
   .sidebar {

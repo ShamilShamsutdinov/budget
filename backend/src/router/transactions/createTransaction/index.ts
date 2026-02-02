@@ -1,4 +1,4 @@
-import { trpc } from "../../lib/trpc"
+import { trpc } from "../../../lib/trpc"
 import { z } from 'zod'
 import { zCreateTransactionTrpcInput } from "./input"
 

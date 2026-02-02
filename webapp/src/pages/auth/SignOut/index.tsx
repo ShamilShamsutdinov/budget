@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getSignInRoute } from '../../lib/routes'
-import { trpc } from '../../lib/trpc'
+import { getSignInRoute } from '../../../lib/routes'
+import { trpc } from '../../../lib/trpc'
 
 export const SignOutPage = () => {
   const navigate = useNavigate()

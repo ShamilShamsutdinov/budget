@@ -1,4 +1,4 @@
-import { trpc } from "../../lib/trpc"
+import { trpc } from "../../../lib/trpc"
 
 export const getTransactionsTrpcRoute = trpc.procedure.query(async ({ ctx }) => {
 

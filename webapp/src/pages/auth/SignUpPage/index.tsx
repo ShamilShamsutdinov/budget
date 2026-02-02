@@ -1,13 +1,13 @@
-import { zSignUpTrpcInput } from '@budget/backend/src/router/signUp/input'
+import { zSignUpTrpcInput } from '@budget/backend/src/router/auth/signUp/input'
 import { useFormik } from 'formik'
 import { withZodSchema } from 'formik-validator-zod'
 import { useState } from 'react'
 import Cookies from 'js-cookie'
 import { z } from 'zod'
-import { Input } from '../../components/UI/Input'
-import { trpc } from '../../lib/trpc'
+import { Input } from '../../../components/UI/Input'
+import { trpc } from '../../../lib/trpc'
 import { useNavigate } from 'react-router-dom'
-import { getAllTransactionsRoute } from '../../lib/routes'
+import { getAllTransactionsRoute } from '../../../lib/routes'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
