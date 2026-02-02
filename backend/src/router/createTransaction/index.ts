@@ -1,15 +1,10 @@
 import { trpc } from "../../lib/trpc"
 import { z } from 'zod'
+import { zCreateTransactionTrpcInput } from "./input"
 
 export const createTransactionTrpcRoute = trpc.procedure
     .input(
-      z.object({
-        type: z.string(),
-        amount: z.number(),
-        category: z.string().min(1),
-        date: z.string(),
-        comment: z.string().optional(),
-      })
+      zCreateTransactionTrpcInput
     ) 
     .mutation(async ({ ctx, input }) => {
      if(!ctx.me){

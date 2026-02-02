@@ -7,22 +7,25 @@ import { Layout } from './components/Layout'
 import { SignUpPage } from './pages/SignUpPage'
 import { SignInPage } from './pages/SignInPage'
 import { SignOutPage } from './pages/SignOut'
+import { AppContextProvider } from './lib/ctx'
 
 
 export const App = () => {
   return (
     <TrpcProvider>
-     <BrowserRouter>
-        <Routes>
-          <Route path={routes.getSignOutRoute()} element={<SignOutPage />} />
-          <Route element={<Layout />}>
-            <Route path={routes.getAllTransactionsRoute()} element={<AllTransactionsPage />} />
-            <Route path={routes.getViewTransactionRoute(routes.viewTransactionRouteParams)} element={<ViewTransactionPage />} />
-            <Route path={routes.getSignUpRoute()} element={<SignUpPage />} />
-            <Route path={routes.getSignInRoute()} element={<SignInPage />} />
-          </Route>
-        </Routes>
-     </BrowserRouter>
+      <AppContextProvider>
+       <BrowserRouter>
+          <Routes>
+            <Route path={routes.getSignOutRoute()} element={<SignOutPage />} />
+            <Route element={<Layout />}>
+              <Route path={routes.getAllTransactionsRoute()} element={<AllTransactionsPage />} />
+              <Route path={routes.getViewTransactionRoute(routes.viewTransactionRouteParams)} element={<ViewTransactionPage />} />
+              <Route path={routes.getSignUpRoute()} element={<SignUpPage />} />
+              <Route path={routes.getSignInRoute()} element={<SignInPage />} />
+            </Route>
+          </Routes>
+       </BrowserRouter>
+      </AppContextProvider>
     </TrpcProvider>
   )
 }

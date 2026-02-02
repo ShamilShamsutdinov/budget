@@ -2,21 +2,48 @@ import { useState } from 'react'
 import { Modal } from '../../components/UI/Modal'
 import { getViewTransactionRoute } from '../../lib/routes'
 import { Link } from 'react-router-dom'
-import { AddTransactionForm } from '../../components/Forms/AddTransactionForm'
+import { AddTransactionForm, type TransactionFormData } from '../../components/Forms/AddTransactionForm'
 import { trpc } from '../../lib/trpc'
 import { getCategoryLabel, getTypeLabel } from '../../utils/translate';
 import {format} from 'date-fns/format' ;
+import { formatDateForInput } from '../../utils/date'
+import type { TrpcRouterOutput } from '../../../../backend/src/router/index'
+import { useMe } from '../../lib/ctx'
 
 export const AllTransactionsPage = () => {
-  const {data} = trpc.getMe.useQuery()
+  const me = useMe()
 
   const result = trpc.getTransactions.useQuery(undefined, {
-    enabled: !!data?.me,
+    enabled: !!me,
   })
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [editingTransaction, setEditingTransaction] = useState<TransactionFormData | null>(null)
 
-  
+  type TransactionFromAPI = TrpcRouterOutput['getTransactions']['transactions'][0]
+
+  const handleEditClick = (transaction: TransactionFromAPI) => {
+    setEditingTransaction({
+      id: transaction.id,
+      type: transaction.type as 'income' | 'expense',
+      amount: transaction.amount,
+      category: transaction.category,
+      date: formatDateForInput(transaction.date),
+      comment: transaction.comment || '',
+    })
+    setIsEditModalOpen(true)
+  }
+
+  const handleEditSuccess = () => {
+    setIsEditModalOpen(false)
+    setEditingTransaction(null)
+  }
+
+  const handleAddSuccess = () => {
+    setIsAddModalOpen(false)
+  }
+
   if (result.isLoading) {
     return <div>Loading...</div>
   }
@@ -29,7 +56,7 @@ export const AllTransactionsPage = () => {
     return <div>No data available</div>
   }
 
-  if (!data?.me) {
+  if (!me) {
     return (
       <div>
         <h1>Все транзакции</h1>
@@ -45,7 +72,7 @@ export const AllTransactionsPage = () => {
               <h1>Все транзакции</h1>
               <div className="transactions-count">Всего {result.data.transactions.length} транзакции</div>
           </div>
-          <button disabled={!data?.me?.id} className={`add-btn ${!data?.me?.id ? 'disabled' : ''}`} onClick={() => setIsOpen(true)}>
+          <button disabled={!me?.id} className={`add-btn ${!me?.id ? 'disabled' : ''}`} onClick={() => setIsAddModalOpen(true)}>
               <i className="fas fa-plus"></i> 
               <span>Добавить транзакцию</span>
           </button>
@@ -108,7 +135,15 @@ export const AllTransactionsPage = () => {
                         </div>
                         <div className="transaction-amount">{transaction.amount}</div>
                         <div className="transaction-actions">
-                            <button className="action-btn edit" title="Редактировать">
+                            <button 
+                               className="action-btn edit" 
+                               title="Редактировать"
+                               onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    handleEditClick(transaction)
+                               }}
+                            >
                                 <i className="fas fa-edit"></i>
                             </button>
                             <button className="action-btn delete" title="Удалить">
@@ -239,8 +274,17 @@ export const AllTransactionsPage = () => {
             </div>
         </div>
 
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-            <AddTransactionForm onSubmitSuccess={() => setIsOpen(false)}/>
+        <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
+            <AddTransactionForm onSubmitSuccess={handleAddSuccess}/>
+        </Modal>
+
+        <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+            {editingTransaction && (
+            <AddTransactionForm 
+                initialData={editingTransaction}
+                onSubmitSuccess={handleEditSuccess}
+            />
+            )}
         </Modal>
     </>
   )

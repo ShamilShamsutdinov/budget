@@ -3,11 +3,10 @@ import { useFormik } from 'formik'
 import { Select } from "../../UI/Select"
 import { TransactionTypeToggle, type TransactionType } from "../../UI/TransactionTypeToggle"
 import { trpc } from '../../../lib/trpc'
-// import { withZodSchema } from 'formik-validator-zod'
-// import { z } from 'zod' - понадобится для валидации формы
+import { useEffect } from 'react'
 
 export interface TransactionFormData {
-  id: string;
+  id?: string;
   type: TransactionType;
   amount: number;
   category: string;
@@ -16,11 +15,13 @@ export interface TransactionFormData {
 }
 
 interface AddTransactionFormProps {
+  initialData?: TransactionFormData;
   onSubmitSuccess?: () => void
 }
 
-export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) => {
+export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransactionFormProps) => {
     const utils = trpc.useUtils()
+    const isEditMode = !!initialData
 
     const createTransaction = trpc.createTransaction.useMutation({
         onSuccess: () => {
@@ -29,6 +30,16 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
             onSubmitSuccess?.() 
         }
     })
+
+    const updateTransaction = trpc.updateTransaction.useMutation({
+        onSuccess: () => {
+            utils.getTransactions.invalidate()
+            utils.getTransaction.invalidate({ id: initialData?.id })
+            formik.resetForm()
+            onSubmitSuccess?.()
+        }
+    })
+
     const incomeCategories = [
         { value: 'salary', label: 'Зарплата' },
         { value: 'freelance', label: 'Фриланс' },
@@ -45,21 +56,44 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
 
     const formik = useFormik({
         initialValues: {
-            id: '',
-            type: 'income' as TransactionType,
-            amount: 0,
-            category: '',
-            date: '',
-            comment: '',
+            id: initialData?.id || '',
+            type: initialData?.type || 'income' as TransactionType,
+            amount: initialData?.amount || 0,
+            category: initialData?.category || '',
+            date: initialData?.date || '',
+            comment: initialData?.comment || '',
         },
         onSubmit: async (values) => {
             const dataToSend = {
                 ...values,
-                amount: Number(values.amount), 
+                amount: Number(values.amount),
             }
-            await createTransaction.mutateAsync(dataToSend)
+
+            if (isEditMode && values.id) {
+                await updateTransaction.mutateAsync({
+                    transactionId: values.id,
+                    ...dataToSend,
+                })
+            } else {
+                await createTransaction.mutateAsync(dataToSend)
+            }
         },
+        enableReinitialize: true,
     })
+
+    // Синхронизируем значения формы при изменении initialData
+    useEffect(() => {
+        if (initialData) {
+            formik.setValues({
+                id: initialData.id || '',
+                type: initialData.type,
+                amount: initialData.amount,
+                category: initialData.category,
+                date: initialData.date,
+                comment: initialData.comment || '',
+            })
+        }
+    }, [initialData])
 
     return (
         <form
@@ -69,7 +103,7 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
             }}
         >
             <div className="modal-header">
-                <h2>Добавить транзакцию</h2>
+                <h2>{isEditMode ? 'Редактировать транзакцию' : 'Добавить транзакцию'}</h2>
             </div>
             
             <div className="modal-body">
@@ -118,18 +152,30 @@ export const AddTransactionForm = ({onSubmitSuccess} : AddTransactionFormProps) 
                         placeholder="Добавьте описание..."
                         value={formik.values.comment}
                         onChange={formik.handleChange} 
+                        name="comment"
                     />
                 </div>
             </div>
             
             <div className="modal-footer">
-                <button type="button"  className="btn btn-secondary" onClick={() => formik.resetForm()}>Отмена</button>
-                <button type="submit" disabled={formik.isSubmitting} className="btn btn-primary">{formik.isSubmitting ? 'Отправляется...' : 'Добавить транзакцию'}</button>
+                <button type="button" className="btn btn-secondary" onClick={() => {
+                    formik.resetForm()
+                    onSubmitSuccess?.()
+                }}>
+                    Отмена
+                </button>
+                <button 
+                    type="submit" 
+                    disabled={formik.isSubmitting || createTransaction.isLoading || updateTransaction.isLoading} 
+                    className="btn btn-primary"
+                >
+                    {formik.isSubmitting || createTransaction.isLoading || updateTransaction.isLoading 
+                        ? 'Сохраняется...' 
+                        : isEditMode ? 'Сохранить изменения' : 'Добавить транзакцию'}
+                </button>
             </div>
         </form>
-
     )
-    
 }
 
 

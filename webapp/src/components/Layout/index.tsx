@@ -1,9 +1,9 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { getAllTransactionsRoute, getSignInRoute, getSignOutRoute, getSignUpRoute } from '../../lib/routes'
-import { trpc } from '../../lib/trpc'
+import { useMe } from '../../lib/ctx'
 
 export const Layout = () => {
-  const { data, isLoading, isFetching, isError } = trpc.getMe.useQuery()
+  const me = useMe()
   const location = useLocation() 
 
   const isActive = (path: string) => {
@@ -21,11 +21,11 @@ export const Layout = () => {
                 <i className="fas fa-list"></i>
                 <span className='text-gray'>Все транзакции</span>
             </Link>
-            {isLoading || isFetching || isError ? null : data.me ? (
+            {me ? (
               <>
                 <Link className='nav-item' to={getSignOutRoute()}>
                   <i className="fas fa-user-plus"></i>
-                  <span className='text-gray'>Выйти ({data.me.nick})</span>
+                  <span className='text-gray'>Выйти ({me.nick})</span>
                 </Link>
               </>
             ) : (
