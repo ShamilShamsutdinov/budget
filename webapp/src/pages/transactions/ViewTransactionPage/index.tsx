@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import type { ViewTransactionRouteParams } from "../../../lib/routes"
 import { trpc } from "../../../lib/trpc"
+import { Loader } from "../../../components/UI/Loader"
 
 export const ViewTransactionPage = () => {
   const { id } = useParams() as ViewTransactionRouteParams
@@ -10,7 +11,7 @@ export const ViewTransactionPage = () => {
   })
 
   if (isLoading || isFetching) {
-    return <span>Loading...</span>
+    return <Loader type="page"/>
   }
 
   if (isError) {

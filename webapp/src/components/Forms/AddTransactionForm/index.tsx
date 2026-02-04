@@ -41,23 +41,23 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
     })
 
     const incomeCategories = [
-        { value: 'salary', label: 'Зарплата' },
-        { value: 'freelance', label: 'Фриланс' },
-        { value: 'investment', label: 'Инвестиции' },
-        { value: 'other', label: 'Другое' },
+        { value: 'Зарплата', label: 'Зарплата' },
+        { value: 'Фриланс', label: 'Фриланс' },
+        { value: 'Инвестиции', label: 'Инвестиции' },
+        { value: 'Другое', label: 'Другое' },
     ];
 
     const expenseCategories = [
-        { value: 'food', label: 'Еда' },
-        { value: 'transport', label: 'Транспорт' },
-        { value: 'entertainment', label: 'Развлечения' },
-        { value: 'other', label: 'Другое' },
+        { value: 'Еда', label: 'Еда' },
+        { value: 'Транспорт', label: 'Транспорт' },
+        { value: 'Развлечения', label: 'Развлечения' },
+        { value: 'Другое', label: 'Другое' },
     ];
 
     const formik = useFormik({
         initialValues: {
             id: initialData?.id || '',
-            type: initialData?.type || 'income' as TransactionType,
+            type: initialData?.type || 'Доход' as TransactionType,
             amount: initialData?.amount || 0,
             category: initialData?.category || '',
             date: initialData?.date || '',
@@ -129,7 +129,7 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
                         id="category" 
                         value={formik.values.category}
                         onChange={(value) => formik.setFieldValue('category', value)}
-                        options={formik.values.type === 'income' ? incomeCategories : expenseCategories}
+                        options={formik.values.type === 'Доход' ? incomeCategories : expenseCategories}
                         placeholder="Выберите категорию"
                     />
                 </div>

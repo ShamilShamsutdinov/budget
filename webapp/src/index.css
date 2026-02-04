@@ -25,14 +25,21 @@
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-html, body, #root {
-    width: 100%;
-    position: relative;
+
+html,
+body,
+#root {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  position: relative;
 }
+
 
 .container{
   display: flex;
   flex-flow: row nowrap;
+  height: 100%;
 }
 
 body {
@@ -361,6 +368,7 @@ a{
 .filters {
   display: flex;
   gap: 12px;
+  margin-right: 40px;
 }
 
 .filter-btn {
@@ -372,6 +380,7 @@ a{
   cursor: pointer;
   font-weight: 500;
   transition: var(--transition);
+  max-height: 45px;
 }
 
 .filter-btn.active {
@@ -866,6 +875,113 @@ a{
 .not-found__subtitle{
   font-size: 24px;
 }
+
+/* Базовый лоадер */
+.loader {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+}
+
+/* Тип для всей страницы */
+.loader.type-page {
+    position: fixed; /* или absolute в зависимости от нужного позиционирования */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(92, 184, 92, 0.2);
+    border-top-color: var(--success);
+}
+
+/* Тип для секции */
+.loader.type-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(92, 184, 92, 0.2);
+    border-top-color: var(--success);
+}
+
+/* Анимация вращения */
+@keyframes rotate {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Для центрирования в родительском контейнере */
+.loader-container {
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Состояния загрузки */
+.loading .loader {
+    display: block;
+}
+
+.loaded .loader {
+    display: none;
+}
+
+.search-container{
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.search-form-wrapper{
+  display: flex;
+
+}
+
+.clear-button{
+  position: relative;
+  cursor: pointer;
+  width: 50px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0px 8px 8px 0px;
+  left: -10px;
+
+}
+
+.search-form{
+  width: 100%;
+}
+
+.search-block-input{
+  width: 100%;
+
+}
+
+.no-transactions{
+  padding: 24px;
+}
+
+/* Анимация лоадера */
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 
 /* Адаптивность */
 @media (max-width: 992px) {
