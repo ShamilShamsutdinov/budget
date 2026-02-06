@@ -9,6 +9,7 @@ export const presetDb = async (ctx: AppContext) => {
     },
     create: {
       nick: 'admin',
+      email: 'indahoodshop@mail.ru',
       password: getPasswordHash(env.INITIAL_ADMIN_PASSWORD),
     },
     update: {

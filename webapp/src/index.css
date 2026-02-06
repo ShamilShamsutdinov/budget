@@ -876,6 +876,12 @@ a{
   font-size: 24px;
 }
 
+.not-found__img{
+  max-width: 1000px;
+  height: auto;
+
+}
+
 /* Базовый лоадер */
 .loader {
     position: relative;

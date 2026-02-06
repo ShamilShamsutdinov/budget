@@ -17,6 +17,7 @@ export const SignUpPage = () => {
   const formik = useFormik({
     initialValues: {
       nick: '',
+      email: '',
       password: '',
       passwordAgain: '',
     },
@@ -53,6 +54,7 @@ export const SignUpPage = () => {
       <h1 className='form-title'>Зарегистрироваться</h1>
       <form className='form-auth' onSubmit={formik.handleSubmit}>
           <Input placeholder="Введите никнейм"  name="nick" formik={formik} />
+          <Input placeholder="Введите email"  name="email" formik={formik} />
           <Input placeholder="Введите пароль" name="password" type="password" formik={formik} />
           <Input placeholder="Введите пароль снова" name="passwordAgain" type="password" formik={formik} />
           {!formik.isValid && !!formik.submitCount && (
