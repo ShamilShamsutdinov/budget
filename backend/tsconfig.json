@@ -9,6 +9,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
+    "ignoreDeprecations": "6.0",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

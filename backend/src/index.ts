@@ -6,11 +6,13 @@ import { applyTrpcToExpressApp } from './lib/trpc'
 import { AppContext, createAppContext } from './lib/ctx'
 import { applyPassportToExpressApp } from './lib/passport'
 import { env } from './lib/env'
+import { presetDb } from './scripts/presetDB'
 
 void (async () => {
   let ctx: AppContext | null = null
   try {
     ctx = createAppContext()
+    await presetDb(ctx)
     const expressApp = express()
     expressApp.use(cors())
     applyPassportToExpressApp(expressApp, ctx)
