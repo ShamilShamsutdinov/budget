@@ -7,7 +7,16 @@ const makeRequestToDashamail = async (
   originalResponse?: AxiosResponse
   loggableResponse: Pick<AxiosResponse, 'status' | 'statusText' | 'data'>
 }> => {
-  // Dashamail требует все параметры в URLSearchParams
+  if (!env.DASHA_API_KEY) {
+    return {
+      loggableResponse: {
+        status: 200,
+        statusText: 'OK',
+        data: { message: 'DASHA_API_KEY is not set' },
+      },
+    }
+  }
+
   const formData = new URLSearchParams()
   
   // Добавляем все параметры

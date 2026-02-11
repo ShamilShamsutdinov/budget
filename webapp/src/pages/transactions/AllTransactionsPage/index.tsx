@@ -45,6 +45,15 @@ export const AllTransactionsPage = () => {
   const [editingTransaction, setEditingTransaction] =
     useState<TransactionFormData | null>(null);
 
+  const utils = trpc.useUtils();
+  const deleteMutation = trpc.deleteTransaction.useMutation({
+    onSuccess: () => {
+      utils.getTransactions.invalidate();
+    }
+  });
+
+
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   type TransactionFromAPI =
@@ -260,7 +269,15 @@ export const AllTransactionsPage = () => {
                       >
                         <i className="fas fa-edit"></i>
                       </button>
-                      <button className="action-btn delete" title="Удалить">
+                      <button className="action-btn delete" 
+                              title="Удалить"
+                              onClick={async (e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  await deleteMutation.mutateAsync({ id: transaction.id });
+                                  
+                                }}
+                      >
                         <i className="fas fa-trash"></i>
                       </button>
                     </div>

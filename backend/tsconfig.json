@@ -4,6 +4,10 @@
     "transpileOnly": true
   },
   "compilerOptions": {
+    "plugins": [{ "transform": "typescript-transform-paths" }],
+    "paths": {
+      "@budget/webapp/*": ["../webapp/*"]
+    },
     "outDir": "./dist",
     "rootDir": "./src",
     "allowJs": true,

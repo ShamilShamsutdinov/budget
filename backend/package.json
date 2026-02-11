@@ -13,12 +13,14 @@
     "pmd": "prisma migrate dev",
     "pgc": "prisma generate",
     "types": "tsc --noEmit --project ./tsconfig.json",
-    "prettify": "prettier --loglevel warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}' '!**/{node_modules,dist}/**/*'"
+    "prettify": "prettier --loglevel warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}' '!**/{node_modules,dist}/**/*'",
+    "prepare": "pnpm pgc && ts-patch install -s"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma"
   },
   "devDependencies": {
+    "@budget/webapp": "workspace:*",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.10",

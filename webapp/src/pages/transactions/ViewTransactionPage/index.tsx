@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom"
-import type { ViewTransactionRouteParams } from "../../../lib/routes"
 import { trpc } from "../../../lib/trpc"
 import { Loader } from "../../../components/UI/Loader"
+import { getViewTransactionRoute } from "../../../lib/routes"
 
 export const ViewTransactionPage = () => {
-  const { id } = useParams() as ViewTransactionRouteParams
+  // const { id } = useParams() as ViewTransactionRouteParams
+  const { id } = getViewTransactionRoute.useParams()
 
   const { data, error, isLoading, isFetching, isError } = trpc.getTransaction.useQuery({
     id

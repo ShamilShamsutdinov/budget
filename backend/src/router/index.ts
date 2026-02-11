@@ -5,6 +5,7 @@ import { getMeTrpcRoute } from './auth/getMe'
 import { signInTrpcRoute } from './auth/signIn'
 import { signUpTrpcRoute } from './auth/signUp'
 import { createTransactionTrpcRoute } from './transactions/createTransaction'
+import { deleteTransactionTrpcRoute } from './transactions/deleteTransaction'
 import { getTransactionTrpcRoute } from './transactions/getTransaction'
 import { getTransactionsTrpcRoute } from './transactions/getTransactions'
 import { updateTransactionTrpcRoute } from './transactions/updateTransaction'
@@ -16,6 +17,7 @@ export const trpcRouter = trpc.router({
   signIn: signInTrpcRoute,
   signUp: signUpTrpcRoute,
   createTransaction: createTransactionTrpcRoute,
+  deleteTransaction: deleteTransactionTrpcRoute,
   getTransaction: getTransactionTrpcRoute,
   getTransactions: getTransactionsTrpcRoute,
   updateTransaction: updateTransactionTrpcRoute,
