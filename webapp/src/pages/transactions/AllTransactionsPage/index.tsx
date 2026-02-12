@@ -15,12 +15,14 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { Loader } from "../../../components/UI/Loader";
 import { SearchForm } from "../../../components/Forms/SearchForm";
 import { Select } from "../../../components/UI/Select";
+import { CategoryCharts } from "../../../components/UI/Chart";
 
 export const AllTransactionsPage = () => {
   const me = useMe();
 
   const [selectedYear, setSelectedYear] = useState<string>('all');
   const [selectedMonth, setSelectedMonth] = useState<string>('all');
+  const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'year' | 'all'>('month');
 
   // Состояние для параметров поиска
   const [searchParams, setSearchParams] = useState<{
@@ -61,6 +63,7 @@ export const AllTransactionsPage = () => {
     onSuccess: () => {
       utils.getTransactions.invalidate();
       utils.comparisonTransaction.invalidate();
+      utils.getTransactionCategoryStats.invalidate();
     }
   });
 
@@ -241,43 +244,8 @@ export const AllTransactionsPage = () => {
           <span>Добавить транзакцию</span>
         </button>
       </header>
-      {/* <div className="stats-cards">
-        <div className="stat-card income-stat">
-          <div className="stat-icon">
-            <i className="fas fa-arrow-down"></i>
-          </div>
-          <div className="stat-info">
-            <h3>Общий доход</h3>
-            <div className="stat-amount">85,430 ₽</div>
-            <div className="stat-change">+12% с прошлого месяца</div>
-          </div>
-        </div>
-
-        <div className="stat-card expense-stat">
-          <div className="stat-icon">
-            <i className="fas fa-arrow-up"></i>
-          </div>
-          <div className="stat-info">
-            <h3>Общий расход</h3>
-            <div className="stat-amount">42,150 ₽</div>
-            <div className="stat-change">+5% с прошлого месяца</div>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <i className="fas fa-wallet"></i>
-          </div>
-          <div className="stat-info">
-            <h3>Баланс</h3>
-            <div className="stat-amount">43,280 ₽</div>
-            <div className="stat-change">Текущий месяц</div>
-          </div>
-        </div>
-      </div> */}
 
       <div className="stats-cards">
-        {/* Карточка дохода */}
         <div className="stat-card income-stat">
           <div className="stat-icon">
             <i className="fas fa-arrow-down"></i>
@@ -306,7 +274,6 @@ export const AllTransactionsPage = () => {
           </div>
         </div>
 
-        {/* Карточка расхода */}
         <div className="stat-card expense-stat">
           <div className="stat-icon">
             <i className="fas fa-arrow-up"></i>
@@ -335,7 +302,6 @@ export const AllTransactionsPage = () => {
           </div>
         </div>
 
-        {/* Карточка баланса */}
         <div className="stat-card">
           <div className="stat-icon">
             <i className="fas fa-wallet"></i>
@@ -358,6 +324,39 @@ export const AllTransactionsPage = () => {
             )}
           </div>
         </div>
+      </div>
+
+       <div className="chart-container">
+        <div className="chart-header">
+          <h2>Статистика доходов и расходов</h2>
+          <div className="chart-period">
+            <button
+              className={`period-btn ${selectedPeriod === 'week' ? 'active' : ''}`}
+              onClick={() => setSelectedPeriod('week')}
+            >
+              Неделя
+            </button>
+            <button
+              className={`period-btn ${selectedPeriod === 'month' ? 'active' : ''}`}
+              onClick={() => setSelectedPeriod('month')}
+            >
+              Месяц
+            </button>
+            <button
+              className={`period-btn ${selectedPeriod === 'year' ? 'active' : ''}`}
+              onClick={() => setSelectedPeriod('year')}
+            >
+              Год
+            </button>
+            <button
+              className={`period-btn ${selectedPeriod === 'all' ? 'active' : ''}`}
+              onClick={() => setSelectedPeriod('all')}
+            >
+              Всё время
+            </button>
+          </div>
+        </div>
+        <CategoryCharts period={selectedPeriod} />
       </div>
 
       <div className="transactions-container">
@@ -493,23 +492,6 @@ export const AllTransactionsPage = () => {
               <Loader type="section" />
             </div>
           )}
-        </div>
-      </div>
-
-      <div className="chart-container">
-        <div className="chart-header">
-          <h2>Статистика доходов и расходов</h2>
-          <div className="chart-period">
-            <button className="period-btn active">Неделя</button>
-            <button className="period-btn">Месяц</button>
-            <button className="period-btn">Год</button>
-          </div>
-        </div>
-        <div className="chart-placeholder">
-          <div>
-            <i className="fas fa-chart-line"></i>
-            <div>Здесь будет график доходов и расходов</div>
-          </div>
         </div>
       </div>
 

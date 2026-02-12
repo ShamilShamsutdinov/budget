@@ -37,8 +37,12 @@ body,
 
 
 .container{
-  display: flex;
+  /* display: flex;
   flex-flow: row nowrap;
+  height: 100%; */
+  
+  display: grid;
+  grid-template-columns: auto 1fr; /* sidebar | main */
   height: 100%;
 }
 
@@ -48,6 +52,7 @@ body {
   display: flex; */
   background-color: #f5f7fb;
   color: var(--dark);
+  padding-bottom: 40px;
 }
 
 a{
@@ -392,7 +397,7 @@ a{
 
 .transactions-list {
   padding: 0;
-  max-height: 267px;
+  max-height: 440px;
   overflow-y: auto;
 }
 
@@ -548,6 +553,23 @@ a{
   justify-content: center;
   color: var(--gray);
   font-size: 16px;
+}
+
+.charts-grid{
+  display: flex;
+
+}
+
+.chart-card{
+  width: 100%;
+
+}
+
+.chart-wrapper{
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
 }
 
 /* Модальное окно */

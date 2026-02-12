@@ -8,6 +8,7 @@ import { comparisonTransactionTrpcRoute } from './transactions/comparisonTransac
 import { createTransactionTrpcRoute } from './transactions/createTransaction'
 import { deleteTransactionTrpcRoute } from './transactions/deleteTransaction'
 import { getTransactionTrpcRoute } from './transactions/getTransaction'
+import { getTransactionCategoryStatsTrpcRoute } from './transactions/getTransactionCategoryStats'
 import { getTransactionsTrpcRoute } from './transactions/getTransactions'
 import { updateTransactionTrpcRoute } from './transactions/updateTransaction'
 // @endindex
@@ -21,6 +22,7 @@ export const trpcRouter = trpc.router({
   createTransaction: createTransactionTrpcRoute,
   deleteTransaction: deleteTransactionTrpcRoute,
   getTransaction: getTransactionTrpcRoute,
+  getTransactionCategoryStats: getTransactionCategoryStatsTrpcRoute,
   getTransactions: getTransactionsTrpcRoute,
   updateTransaction: updateTransactionTrpcRoute,
   // @endindex
