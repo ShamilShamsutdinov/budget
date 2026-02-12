@@ -4,6 +4,7 @@ import { trpc } from "../lib/trpc"
 import { getMeTrpcRoute } from './auth/getMe'
 import { signInTrpcRoute } from './auth/signIn'
 import { signUpTrpcRoute } from './auth/signUp'
+import { comparisonTransactionTrpcRoute } from './transactions/comparisonTransaction'
 import { createTransactionTrpcRoute } from './transactions/createTransaction'
 import { deleteTransactionTrpcRoute } from './transactions/deleteTransaction'
 import { getTransactionTrpcRoute } from './transactions/getTransaction'
@@ -16,6 +17,7 @@ export const trpcRouter = trpc.router({
   getMe: getMeTrpcRoute,
   signIn: signInTrpcRoute,
   signUp: signUpTrpcRoute,
+  comparisonTransaction: comparisonTransactionTrpcRoute,
   createTransaction: createTransactionTrpcRoute,
   deleteTransaction: deleteTransactionTrpcRoute,
   getTransaction: getTransactionTrpcRoute,

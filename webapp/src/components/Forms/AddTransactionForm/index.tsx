@@ -23,9 +23,16 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
     const utils = trpc.useUtils()
     const isEditMode = !!initialData
 
+    const {} = trpc.comparisonTransaction.useQuery({
+        type: "",
+        amount: 0,
+        date: ""
+    });
+
     const createTransaction = trpc.createTransaction.useMutation({
         onSuccess: () => {
             utils.getTransactions.invalidate()
+            utils.comparisonTransaction.invalidate()
             formik.resetForm()
             onSubmitSuccess?.() 
         }
@@ -35,6 +42,7 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
         onSuccess: () => {
             utils.getTransactions.invalidate()
             utils.getTransaction.invalidate({ id: initialData?.id })
+            utils.comparisonTransaction.invalidate()
             formik.resetForm()
             onSubmitSuccess?.()
         }
