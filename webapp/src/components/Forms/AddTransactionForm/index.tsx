@@ -3,7 +3,6 @@ import { useFormik } from 'formik'
 import { Select } from "../../UI/Select"
 import { TransactionTypeToggle, type TransactionType } from "../../UI/TransactionTypeToggle"
 import { trpc } from '../../../lib/trpc'
-import { useEffect } from 'react'
 
 export interface TransactionFormData {
   id?: string;
@@ -23,18 +22,12 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
     const utils = trpc.useUtils()
     const isEditMode = !!initialData
 
-    const {} = trpc.comparisonTransaction.useQuery({
-        type: "",
-        amount: 0,
-        date: ""
-    });
-
     const createTransaction = trpc.createTransaction.useMutation({
         onSuccess: () => {
             utils.getTransactions.invalidate()
             utils.getTransaction.invalidate({ id: initialData?.id })
-            utils.comparisonTransaction.invalidate()
-            utils.getTransactionCategoryStats.invalidate();
+            utils.getPeriodComparison.invalidate()
+            utils.getTransactionCategoryStats.invalidate()
             formik.resetForm()
             onSubmitSuccess?.() 
         }
@@ -44,8 +37,8 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
         onSuccess: () => {
             utils.getTransactions.invalidate()
             utils.getTransaction.invalidate({ id: initialData?.id })
-            utils.comparisonTransaction.invalidate()
-            utils.getTransactionCategoryStats.invalidate();
+            utils.getPeriodComparison.invalidate()
+            utils.getTransactionCategoryStats.invalidate()
             formik.resetForm()
             onSubmitSuccess?.()
         }
@@ -55,6 +48,7 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
         { value: 'Зарплата', label: 'Зарплата' },
         { value: 'Фриланс', label: 'Фриланс' },
         { value: 'Инвестиции', label: 'Инвестиции' },
+        { value: 'Перевод', label: 'Перевод' },
         { value: 'Другое', label: 'Другое' },
     ];
 
@@ -62,6 +56,13 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
         { value: 'Еда', label: 'Еда' },
         { value: 'Транспорт', label: 'Транспорт' },
         { value: 'Развлечения', label: 'Развлечения' },
+        { value: 'Перевод', label: 'Перевод' },
+        { value: 'Отпуск', label: 'Отпуск' },
+        { value: 'Здоровье', label: 'Здоровье' },
+        { value: 'Фаст-фуд', label: 'Фаст-фуд' },
+        { value: 'Авто', label: 'Авто' },
+        { value: 'Кредит', label: 'Кредит' },
+        { value: 'ЖКХ', label: 'ЖКХ' },
         { value: 'Другое', label: 'Другое' },
     ];
 
@@ -89,22 +90,8 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
                 await createTransaction.mutateAsync(dataToSend)
             }
         },
-        enableReinitialize: true,
+        enableReinitialize: true, // автоматически обновит форму при изменении initialData
     })
-
-    // Синхронизируем значения формы при изменении initialData
-    useEffect(() => {
-        if (initialData) {
-            formik.setValues({
-                id: initialData.id || '',
-                type: initialData.type,
-                amount: initialData.amount,
-                category: initialData.category,
-                date: initialData.date,
-                comment: initialData.comment || '',
-            })
-        }
-    }, [initialData])
 
     return (
         <form
@@ -188,5 +175,4 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
         </form>
     )
 }
-
 

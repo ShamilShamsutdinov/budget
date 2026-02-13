@@ -18,12 +18,12 @@ export const Layout = () => {
               <div className='logo-text'>SmartBudget</div>
           </div>
           <nav className="nav-menu">
-            <Link className={`nav-item ${isActive(getAllTransactionsRoute()) ? 'active' : ''}`} to={getAllTransactionsRoute()}>
-                <i className="fas fa-list"></i>
-                <span className='text-gray'>Все транзакции</span>
-            </Link>
             {me ? (
               <>
+                <Link className={`nav-item ${isActive(getAllTransactionsRoute()) ? 'active' : ''}`} to={getAllTransactionsRoute()}>
+                    <i className="fas fa-list"></i>
+                    <span className='text-gray'>Все транзакции</span>
+                </Link>
                 <Link className='nav-item' to={getSignOutRoute()}>
                   <i className="fas fa-user-plus"></i>
                   <span className='text-gray'>Выйти ({me.nick})</span>

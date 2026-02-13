@@ -4,12 +4,13 @@ import { trpc } from "../lib/trpc"
 import { getMeTrpcRoute } from './auth/getMe'
 import { signInTrpcRoute } from './auth/signIn'
 import { signUpTrpcRoute } from './auth/signUp'
-import { comparisonTransactionTrpcRoute } from './transactions/comparisonTransaction'
 import { createTransactionTrpcRoute } from './transactions/createTransaction'
 import { deleteTransactionTrpcRoute } from './transactions/deleteTransaction'
+import { getPeriodComparisonTrpcRoute } from './transactions/getPeriodComparison'
 import { getTransactionTrpcRoute } from './transactions/getTransaction'
 import { getTransactionCategoryStatsTrpcRoute } from './transactions/getTransactionCategoryStats'
 import { getTransactionsTrpcRoute } from './transactions/getTransactions'
+import { getTransactionsYearsTrpcRoute } from './transactions/getTransactionsYears'
 import { updateTransactionTrpcRoute } from './transactions/updateTransaction'
 // @endindex
 
@@ -18,12 +19,13 @@ export const trpcRouter = trpc.router({
   getMe: getMeTrpcRoute,
   signIn: signInTrpcRoute,
   signUp: signUpTrpcRoute,
-  comparisonTransaction: comparisonTransactionTrpcRoute,
   createTransaction: createTransactionTrpcRoute,
   deleteTransaction: deleteTransactionTrpcRoute,
+  getPeriodComparison: getPeriodComparisonTrpcRoute,
   getTransaction: getTransactionTrpcRoute,
   getTransactionCategoryStats: getTransactionCategoryStatsTrpcRoute,
   getTransactions: getTransactionsTrpcRoute,
+  getTransactionsYears: getTransactionsYearsTrpcRoute,
   updateTransaction: updateTransactionTrpcRoute,
   // @endindex
 })
