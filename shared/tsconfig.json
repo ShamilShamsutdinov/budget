@@ -1,0 +1,8 @@
+{
+  "extends": "../backend/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",  
+    "types": ["node"]
+  },
+  "include": ["src/**/*"]
+}

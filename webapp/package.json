@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@budget/backend": "workspace:*",
+    "@budget/shared": "workspace:*",
     "@tanstack/react-query": "4.32.6",
     "@trpc/client": "^10.45.2",
     "@trpc/react-query": "^10.45.2",

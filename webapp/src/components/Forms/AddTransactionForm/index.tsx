@@ -28,6 +28,7 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
             utils.getTransaction.invalidate({ id: initialData?.id })
             utils.getPeriodComparison.invalidate()
             utils.getTransactionCategoryStats.invalidate()
+            utils.getTransactionsYears.invalidate();
             formik.resetForm()
             onSubmitSuccess?.() 
         }
@@ -39,6 +40,7 @@ export const AddTransactionForm = ({ initialData, onSubmitSuccess }: AddTransact
             utils.getTransaction.invalidate({ id: initialData?.id })
             utils.getPeriodComparison.invalidate()
             utils.getTransactionCategoryStats.invalidate()
+            utils.getTransactionsYears.invalidate();
             formik.resetForm()
             onSubmitSuccess?.()
         }

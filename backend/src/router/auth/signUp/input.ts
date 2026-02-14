@@ -1,3 +1,4 @@
+import { zEmailRequired, zStringRequired } from '@budget/shared/src/zod'
 import { z } from 'zod'
 
 export const zSignUpTrpcInput = z.object({
@@ -5,6 +6,6 @@ export const zSignUpTrpcInput = z.object({
     .string()
     .min(1)
     .regex(/^[a-z0-9-]+$/, 'Nick may contain only lowercase letters, numbers and dashes'),
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: zEmailRequired,
+  password: zStringRequired,
 })

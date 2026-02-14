@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@budget/webapp": "workspace:*",
+    "@budget/shared": "workspace:*",
     "@types/cors": "^2.8.17",
     "@types/date-fns": "^2.6.3",
     "@types/express": "^5.0.0",

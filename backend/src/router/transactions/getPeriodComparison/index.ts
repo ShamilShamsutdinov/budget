@@ -142,11 +142,14 @@ export const getPeriodComparisonTrpcRoute = trpc.procedure
       throw new TRPCError({ code: 'UNAUTHORIZED', message: 'NO_AUTHORIZATION' });
     }
 
+     const userId = ctx.me.id;
+
     // Вспомогательная функция для получения сумм за период
     const getTotals = async (start: Date, end: Date) => {
       const stats = await ctx.prisma.transaction.groupBy({
         by: ['type'],
         where: {
+          ownerId: userId,
           date: { gte: start, lte: end },
         },
         _sum: { amount: true },

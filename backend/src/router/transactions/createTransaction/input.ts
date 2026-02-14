@@ -1,9 +1,10 @@
+import { zNumberRequired, zStringOptional, zStringRequired } from '@budget/shared/src/zod'
 import { z } from 'zod'
 
 export const zCreateTransactionTrpcInput = z.object({
-    type: z.string(),
-    amount: z.number(),
-    category: z.string().min(1),
-    date: z.string(),
-    comment: z.string().optional(),
+    type: zStringRequired ,
+    amount: zNumberRequired,
+    category: zStringRequired ,
+    date: zStringRequired ,
+    comment: zStringOptional,
 })

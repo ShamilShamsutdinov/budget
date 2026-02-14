@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv'
 import { z } from 'zod'
+import { zEnvHost, zEnvNonemptyTrimmed, zEnvNonemptyTrimmedRequiredOnNotLocal } from '@budget/shared/src/zod'
 
 dotenv.config()
 
@@ -10,18 +11,17 @@ const zNonemptyTrimmedRequiredOnNotLocal = zNonemptyTrimmed.optional().refine(
   'Required on local host'
 )
 
-
 const zEnv = z.object({
-  PORT: zNonemptyTrimmed,
-  HOST_ENV: z.enum(['local', 'production']),
-  DATABASE_URL: zNonemptyTrimmed,
-  JWT_SECRET: zNonemptyTrimmed,
-  PASSWORD_SALT: zNonemptyTrimmed,
-  INITIAL_ADMIN_PASSWORD: zNonemptyTrimmed,
-  WEBAPP_URL: zNonemptyTrimmed,
-  DASHA_API_KEY: zNonemptyTrimmedRequiredOnNotLocal,
-  FROM_EMAIL_NAME: zNonemptyTrimmed,
-  FROM_EMAIL_ADDRESS: zNonemptyTrimmed,
+  PORT: zEnvNonemptyTrimmed,
+  HOST_ENV: zEnvHost,
+  DATABASE_URL: zEnvNonemptyTrimmed,
+  JWT_SECRET: zEnvNonemptyTrimmed,
+  PASSWORD_SALT: zEnvNonemptyTrimmed,
+  INITIAL_ADMIN_PASSWORD: zEnvNonemptyTrimmed,
+  WEBAPP_URL: zEnvNonemptyTrimmed,
+  DASHA_API_KEY: zEnvNonemptyTrimmedRequiredOnNotLocal,
+  FROM_EMAIL_NAME: zEnvNonemptyTrimmed,
+  FROM_EMAIL_ADDRESS: zEnvNonemptyTrimmed,
 })
 
 export const env = zEnv.parse(process.env)
