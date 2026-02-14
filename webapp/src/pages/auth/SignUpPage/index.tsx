@@ -8,6 +8,7 @@ import { Input } from '../../../components/UI/Input'
 import { trpc } from '../../../lib/trpc'
 import { useNavigate } from 'react-router-dom'
 import { getAllTransactionsRoute } from '../../../lib/routes'
+import { zStringRequired } from '../../../../../shared/src/zod'
 
 export const SignUpPage = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ export const SignUpPage = () => {
     validate: withZodSchema(
       zSignUpTrpcInput
         .extend({
-          passwordAgain: z.string().min(1),
+          passwordAgain: zStringRequired,
         })
         .superRefine((val, ctx) => {
           if (val.password !== val.passwordAgain) {

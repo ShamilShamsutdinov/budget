@@ -111,7 +111,7 @@ export const AllTransactionsPage = () => {
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      keepPreviousData: false,
+      keepPreviousData: true,
       staleTime: 5 * 60 * 1000,
     }
   );
