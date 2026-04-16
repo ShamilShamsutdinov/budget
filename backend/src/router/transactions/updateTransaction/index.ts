@@ -1,7 +1,7 @@
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 import { zUpdateTransactionTrpcInput } from './input'
 
-export const updateTransactionTrpcRoute = trpc.procedure.input(zUpdateTransactionTrpcInput).mutation(async ({ ctx, input }) => {
+export const updateTransactionTrpcRoute = trpcLoggedProcedure.input(zUpdateTransactionTrpcInput).mutation(async ({ ctx, input }) => {
   const { transactionId, ...transactionInput } = input
   if (!ctx.me) {
     throw new Error('UNAUTHORIZED')

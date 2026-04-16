@@ -1,7 +1,7 @@
-import { trpc } from "../../../lib/trpc"
+import { trpcLoggedProcedure } from "../../../lib/trpc"
 import { zCreateTransactionTrpcInput } from "./input"
 
-export const deleteTransactionTrpcRoute = trpc.procedure
+export const deleteTransactionTrpcRoute = trpcLoggedProcedure
     .input(
       zCreateTransactionTrpcInput
     ) 

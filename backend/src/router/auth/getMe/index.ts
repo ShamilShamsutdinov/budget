@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { trpc } from '../../../lib/trpc'
+import { trpcLoggedProcedure } from '../../../lib/trpc'
 
-export const getMeTrpcRoute = trpc.procedure.query(({ ctx }) => {
+export const getMeTrpcRoute = trpcLoggedProcedure.query(({ ctx }) => {
   return { me: ctx.me && _.pick(ctx.me, ['id', 'nick']) }
 })

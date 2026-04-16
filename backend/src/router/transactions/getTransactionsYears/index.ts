@@ -1,7 +1,7 @@
-import { trpc } from '../../../lib/trpc';
+import { trpcLoggedProcedure } from '../../../lib/trpc';
 import { TRPCError } from '@trpc/server';
 
-export const getTransactionsYearsTrpcRoute = trpc.procedure
+export const getTransactionsYearsTrpcRoute = trpcLoggedProcedure
     .query(async ({ ctx }) => {
     if (!ctx.me) throw new TRPCError({ code: 'UNAUTHORIZED' });
 

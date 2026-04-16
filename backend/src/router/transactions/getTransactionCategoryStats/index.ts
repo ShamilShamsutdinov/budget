@@ -1,8 +1,8 @@
-import { trpc } from '../../../lib/trpc';
+import { trpcLoggedProcedure } from '../../../lib/trpc';
 import { TRPCError } from '@trpc/server';
 import { zGetTransactionCategoryStatsTrpcInput } from './input';
 
-export const getTransactionCategoryStatsTrpcRoute = trpc.procedure
+export const getTransactionCategoryStatsTrpcRoute = trpcLoggedProcedure
   .input(zGetTransactionCategoryStatsTrpcInput)
   .query(async ({ ctx, input }) => {
     if (!ctx.me) throw new TRPCError({ code: 'UNAUTHORIZED' });

@@ -1,7 +1,7 @@
-import { trpc } from "../../../lib/trpc"
+import { trpcLoggedProcedure } from "../../../lib/trpc"
 import { z } from 'zod'
 
-export const getTransactionTrpcRoute = trpc.procedure
+export const getTransactionTrpcRoute = trpcLoggedProcedure
     .input(
       z.object({
         id: z.string(),
