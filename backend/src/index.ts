@@ -9,6 +9,7 @@ import { applyPassportToExpressApp } from './lib/passport'
 import { presetDb } from './scripts/presetDB'
 import { Logger } from 'winston'
 import { logger } from './lib/logger'
+import { applyServeWebApp } from './lib/serveWebApp'
 
 void (async () => {
   let ctx: AppContext | null = null
@@ -19,6 +20,7 @@ void (async () => {
     expressApp.use(cors())
     applyPassportToExpressApp(expressApp, ctx)
     applyTrpcToExpressApp(expressApp, ctx, trpcRouter)
+    await applyServeWebApp(expressApp)
     expressApp.use((error: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.error('express', error)
       if (res.headersSent) {

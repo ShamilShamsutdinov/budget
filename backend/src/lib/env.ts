@@ -4,12 +4,12 @@ import { zEnvHost, zEnvNonemptyTrimmed, zEnvNonemptyTrimmedRequiredOnNotLocal } 
 
 dotenv.config()
 
-const zNonemptyTrimmed = z.string().trim().min(1)
-const zNonemptyTrimmedRequiredOnNotLocal = zNonemptyTrimmed.optional().refine(
-  // eslint-disable-next-line node/no-process-env
-  (val) => process.env.HOST_ENV === 'local' || !!val,
-  'Required on local host'
-)
+// const zNonemptyTrimmed = z.string().trim().min(1)
+// const zNonemptyTrimmedRequiredOnNotLocal = zNonemptyTrimmed.optional().refine(
+//   // eslint-disable-next-line node/no-process-env
+//   (val) => process.env.HOST_ENV === 'local' || !!val,
+//   'Required on local host'
+// )
 
 const zEnv = z.object({
   PORT: zEnvNonemptyTrimmed,

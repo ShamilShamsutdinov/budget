@@ -1,6 +1,8 @@
 {
   "extends": "../backend/tsconfig.json",
   "compilerOptions": {
+    "outDir": "./dist",
+    "composite": true,
     "rootDir": "./src",  
     "types": ["node"]
   },
